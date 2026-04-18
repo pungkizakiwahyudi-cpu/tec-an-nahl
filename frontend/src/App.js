@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import WhatsAppButton from "./components/WhatsAppButton";
+import FlyerPopup from "./components/FlyerPopup";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ProgramsPage from "./pages/ProgramsPage";
@@ -31,6 +32,7 @@ function App() {
         </main>
         <Footer />
         <WhatsAppButton />
+        <FlyerPopup />
         <Toaster />
       </BrowserRouter>
     </div>

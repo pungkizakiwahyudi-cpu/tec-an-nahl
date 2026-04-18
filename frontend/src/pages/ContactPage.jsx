@@ -1,55 +1,9 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { MapPin, Phone, Mail, MessageCircle, Loader2, Baby, Users, UserCheck, CheckCircle2 } from 'lucide-react';
-import { toast } from '../components/ui/sonner';
-import axios from 'axios';
+import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { mockPrograms } from '../mock';
-
-const API = 'http://127.0.0.1:8000/api';
-
-const programIcons = [Baby, Users, UserCheck];
-
-const programAccents = [
-  { bg: 'bg-emerald-50', border: 'border-emerald-400', icon: 'text-emerald-600', badge: 'bg-emerald-100 text-emerald-700' },
-  { bg: 'bg-blue-50',    border: 'border-blue-400',    icon: 'text-blue-600',    badge: 'bg-blue-100 text-blue-700'       },
-  { bg: 'bg-amber-50',   border: 'border-[#D4AF37]',   icon: 'text-amber-600',   badge: 'bg-amber-100 text-amber-700'     },
-];
-
-const programValues = ['anak', 'akhwat', 'akhi'];
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    name: '', phone: '', email: '', age: '', program: '', message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (field, value) =>
-    setFormData((prev) => ({ ...prev, [field]: value }));
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.program) {
-      toast.error('Silakan pilih program terlebih dahulu.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await axios.post(`${API}/registrations`, { ...formData, age: Number(formData.age) });
-      toast.success('Pendaftaran berhasil! Kami akan menghubungi Anda.');
-      setFormData({ name: '', phone: '', email: '', age: '', program: '', message: '' });
-    } catch {
-      toast.error('Gagal mengirim data. Coba lagi.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
@@ -59,9 +13,9 @@ const ContactPage = () => {
   };
 
   const contactItems = [
-    { icon: MapPin, label: 'Alamat',  lines: ['Jl. Arwana 2 No.11', 'Babelan, Bekasi'] },
-    { icon: Phone,  label: 'Telepon', lines: ['+62 857-7552-6387']                       },
-    { icon: Mail,   label: 'Email',   lines: ['TEC.ANNAHL@GMAIL.COM']                    },
+    { icon: MapPin, label: 'Alamat',  lines: ['Kav. Bumi Kahuripan Jl. Arwana 2', 'RT.03/050 Babelan, Bekasi'] },
+    { icon: Phone,  label: 'Telepon', lines: ['+62 857-7552-6387'] },
+    { icon: Mail,   label: 'Email',   lines: ['TEC.ANNAHL@GMAIL.COM'] },
   ];
 
   return (
@@ -129,13 +83,13 @@ const ContactPage = () => {
                     </div>
                   ))}
                   <div className="pt-2">
-                    <Button
-                      className="w-full whatsapp-btn"
+                    <button
+                      className="w-full whatsapp-btn flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-semibold text-white transition-all"
                       onClick={handleWhatsApp}
                     >
-                      <MessageCircle className="w-5 h-5 mr-2" />
+                      <MessageCircle className="w-5 h-5" />
                       Hubungi via WhatsApp
-                    </Button>
+                    </button>
                   </div>
                 </CardContent>
               </Card>
@@ -158,7 +112,7 @@ const ContactPage = () => {
               </Card>
             </motion.div>
 
-            {/* RIGHT — FORM */}
+            {/* RIGHT — GOOGLE FORM */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -172,139 +126,19 @@ const ContactPage = () => {
                   <CardTitle className="text-xl text-green-800">Formulir Pendaftaran</CardTitle>
                   <CardDescription>Isi data di bawah ini, kami akan segera menghubungi Anda</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-5">
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <Label className="text-sm font-medium text-gray-700">Nama Lengkap *</Label>
-                        <Input
-                          value={formData.name}
-                          onChange={(e) => handleChange('name', e.target.value)}
-                          placeholder="Masukkan nama lengkap"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-sm font-medium text-gray-700">No. Telepon *</Label>
-                        <Input
-                          value={formData.phone}
-                          onChange={(e) => handleChange('phone', e.target.value)}
-                          placeholder="08xxxxxxxxxx"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <Label className="text-sm font-medium text-gray-700">Email</Label>
-                        <Input
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => handleChange('email', e.target.value)}
-                          placeholder="email@contoh.com"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-sm font-medium text-gray-700">Usia *</Label>
-                        <Input
-                          type="number"
-                          value={formData.age}
-                          onChange={(e) => handleChange('age', e.target.value)}
-                          placeholder="Usia santri"
-                          min="1"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    {/* PROGRAM SELECTOR */}
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Pilih Program *</Label>
-                      <p className="text-xs text-gray-400">Klik salah satu program di bawah ini</p>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                        {mockPrograms.map((program, index) => {
-                          const Icon       = programIcons[index];
-                          const accent     = programAccents[index];
-                          const value      = programValues[index];
-                          const isSelected = formData.program === value;
-
-                          return (
-                            <motion.div
-                              key={program.id}
-                              whileHover={{ scale: 1.03 }}
-                              whileTap={{ scale: 0.97 }}
-                              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                            >
-                              <button
-                                type="button"
-                                onClick={() => handleChange('program', value)}
-                                className={`
-                                  w-full text-left rounded-xl border-2 p-4 transition-all duration-200 relative
-                                  ${isSelected
-                                    ? `${accent.bg} ${accent.border} shadow-md`
-                                    : 'bg-white border-gray-200 hover:border-gray-300 hover:shadow-sm'
-                                  }
-                                `}
-                              >
-                                {isSelected && (
-                                  <motion.div
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ type: 'spring', stiffness: 400 }}
-                                    className="absolute top-2 right-2"
-                                  >
-                                    <CheckCircle2 className={`w-5 h-5 ${accent.icon}`} />
-                                  </motion.div>
-                                )}
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${isSelected ? accent.bg : 'bg-gray-50'}`}>
-                                  <Icon className={`w-5 h-5 ${isSelected ? accent.icon : 'text-gray-400'}`} />
-                                </div>
-                                <p className={`font-semibold text-sm mb-2 leading-snug ${isSelected ? 'text-gray-900' : 'text-gray-600'}`}>
-                                  {program.title}
-                                </p>
-                                <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${isSelected ? accent.badge : 'bg-gray-100 text-gray-500'}`}>
-                                  {program.ageGroup}
-                                </span>
-                              </button>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-
-                      {!formData.program && (
-                        <p className="text-xs text-gray-400 italic mt-1">* Wajib memilih salah satu program</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label className="text-sm font-medium text-gray-700">Pesan / Pertanyaan</Label>
-                      <Textarea
-                        rows={3}
-                        value={formData.message}
-                        onChange={(e) => handleChange('message', e.target.value)}
-                        placeholder="Tuliskan pesan atau pertanyaan Anda di sini..."
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full submit-btn py-3 rounded-lg"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Mengirim...
-                        </>
-                      ) : (
-                        'Kirim Pendaftaran'
-                      )}
-                    </Button>
-
-                  </form>
+                <CardContent className="p-0">
+                  <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSf8CUL7mTrhpdjDsbNYPL1Q0YsbGr63hAga5xzgM91CybJS0w/viewform?embedded=true"
+                    width="100%"
+                    height="700"
+                    frameBorder="0"
+                    marginHeight="0"
+                    marginWidth="0"
+                    title="Formulir Pendaftaran TEC AN-NAHL"
+                    className="rounded-b-xl"
+                  >
+                    Memuat…
+                  </iframe>
                 </CardContent>
               </Card>
             </motion.div>
